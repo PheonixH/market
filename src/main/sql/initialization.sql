@@ -117,3 +117,85 @@ create table `member_query_history`
   auto_increment = 11
   default charset = utf8mb4
   collate = utf8mb4_unicode_ci;
+
+# 商品表 (spu表)
+create table `product`
+(
+    `id`            int(10) unsigned                          not null auto_increment,
+    `name`          varchar(255) collate utf8mb4_unicode_ci   not null comment '商品标题',
+    `category_id`   int(11)                                   not null comment '商品分类编号',
+    `mer_id`        int(11)                                   not null comment '商家编号',
+    `freight_id`    int(11)                                            default null,
+    `type_id`       tinyint(4)                                not null comment '类型编号',
+    `sketch`        varchar(255) collate utf8mb4_unicode_ci            default null comment '简述',
+    `intro`         text collate utf8mb4_unicode_ci           not null comment '商品描述',
+    `keywords`      varchar(255) collate utf8mb4_unicode_ci            default null comment '商品关键字',
+    `tags`          varchar(255) collate utf8mb4_unicode_ci            default null comment '标签',
+    `marque`        varchar(255) collate utf8mb4_unicode_ci   not null comment '商品型号',
+    `barcode`       varchar(255) collate utf8mb4_unicode_ci   not null comment '仓库条码',
+    `brand_id`      int(11)                                   not null comment '品牌编号',
+    `virtual`       int(11)                                   not null default '0' comment '虚拟购买量',
+    `price`         decimal(8, 2)                             not null comment '商品价格',
+    `market_price`  decimal(8, 2)                             not null comment '市场价格',
+    `integral`      int(11)                                   not null default '0' comment '可使用积分抵消',
+    `stock`         int(11)                                   not null comment '库存量',
+    `warning_stock` int(11)                                   not null comment '库存警告',
+    `picture_url`   varchar(125) collate utf8mb4_unicode_ci   not null comment '封面图',
+    `posters`       varchar(125) collate utf8mb4_unicode_ci            default null,
+    `status`        tinyint(4)                                not null comment '状态 -1=>下架,1=>上架,2=>预售,0=>未上架',
+    `state`         tinyint(4)                                not null default '0' comment '审核状态 -1 审核失败 0 未审核 1 审核成功',
+    `is_package`    enum ('0','1') collate utf8mb4_unicode_ci not null default '0' comment '是否是套餐',
+    `is_integral`   enum ('0','1') collate utf8mb4_unicode_ci not null default '0' comment '是否是积分产品',
+    `sort`          int(11)                                   not null default '99' comment '排序',
+    `deleted_at`    timestamp                                 null     default null,
+    `created_at`    timestamp                                 null     default null,
+    `updated_at`    timestamp                                 null     default null,
+    primary key (`id`)
+) engine = innodb
+  auto_increment = 24
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
+
+# 系统属性表
+create table `product_attribute_option`
+(
+    `id`      int(10) unsigned                        not null auto_increment,
+    `name`    varchar(125) collate utf8mb4_unicode_ci not null comment '选项名称',
+    `attr_id` int(11)                                 not null comment '属性编码',
+    `sort`    int(11)                                 not null default '999' comment '排序',
+    primary key (`id`),
+    key `product_attribute_option_name_attr_id_index` (`name`, `attr_id`)
+) engine = innodb
+  auto_increment = 5
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
+
+# 规格属性绑定表
+create table `product_attribute_and_option`
+(
+    `id`                 int(10) unsigned not null auto_increment,
+    `sku_id`             int(11)          not null comment 'sku编码',
+    `option_id`          int(11)          not null default '0' comment '属性选项编码',
+    `attribute_id`       int(11)          not null comment '属性编码',
+    `sort`               int(11)          not null default '999' comment '排序',
+    `supplier_option_id` int(11)                   default null,
+    primary key (`id`),
+    key `product_attribute_and_option_sku_id_option_id_attribute_id_index` (`sku_id`, `option_id`, `attribute_id`)
+) engine = innodb
+  auto_increment = 6335
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
+
+# 自定义规格表
+create table `product_attribute`
+(
+    `id`         int(10) unsigned                        not null auto_increment,
+    `product_id` int(11)                                 not null comment '商品编码',
+    `name`       varchar(125) collate utf8mb4_unicode_ci not null comment '规格名称',
+    `sort`       int(11)                                 not null default '999' comment '排序',
+    primary key (`id`),
+    key `product_supplier_attribute_name_product_id_index` (`name`, `product_id`)
+) engine = innodb
+  auto_increment = 40
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
