@@ -1,13 +1,13 @@
-package com.example.marketprodect;
+package com.example.marketproduct;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MarketProdectApplication {
+public class MarketProductApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(MarketProdectApplication.class, args);
+        SpringApplication.run(MarketProductApplication.class, args);
     }
 
 }

@@ -1,10 +1,10 @@
-package com.example.marketprodect;
+package com.example.marketproduct;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class MarketProdectApplicationTests {
+class MarketProductApplicationTests {
 
     @Test
     void contextLoads() {

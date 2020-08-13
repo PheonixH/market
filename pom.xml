@@ -19,6 +19,9 @@
     <modules>
         <module>market-admin</module>
         <module>market-order</module>
+        <module>market-coupon</module>
+        <module>market-ware</module>
+        <module>market-product</module>
     </modules>
 
     <properties>
