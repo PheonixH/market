@@ -199,3 +199,63 @@ create table `product_attribute`
   auto_increment = 40
   default charset = utf8mb4
   collate = utf8mb4_unicode_ci;
+# 专辑
+# 在淘宝的逻辑中,商家可为商品添加视频和图片，可为每个sku添加图片。我们称为专辑。将一组图片及视频类似歌手作家出专辑一样，绑定到商品表和sku表上
+create table `product_album`
+(
+    `id`         int(10) unsigned                        not null auto_increment,
+    `product_id` int(11)                                 not null comment '商品编号',
+    `name`       varchar(25) collate utf8mb4_unicode_ci  not null comment '商品名称',
+    `url`        varchar(45) collate utf8mb4_unicode_ci           default null comment '图片地址',
+    `size`       int(11)                                          default null comment '视频大小',
+    `intro`      varchar(255) collate utf8mb4_unicode_ci not null comment '图片介绍',
+    `sort`       int(11)                                 not null default '999' comment '排序',
+    `status`     tinyint(4)                              not null default '0' comment '图片状态',
+    `state`      tinyint(4)                              not null default '0' comment '资源类型 0=>图片 1=>视频',
+    `created_at` timestamp                               null     default null,
+    `updated_at` timestamp                               null     default null,
+    primary key (`id`)
+) engine = innodb
+  auto_increment = 60
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
+
+# 品牌
+# 每个商品都归属与一个品牌，例如iphonex归属与苹果公司,小米8归属与小米公司一样。品牌无需关联到sku内，道理很简单，当前的sku是iphonex归属与苹果公司，自然而然iphonex下面的规格都属于苹果了。
+create table `product_brand`
+(
+    `id`                  int(10) unsigned                        not null auto_increment,
+    `product_category_id` int(11)                                 not null comment '商品类别编号',
+    `name`                varchar(25) collate utf8mb4_unicode_ci  not null comment '品牌名称',
+    `image_url`           varchar(125) collate utf8mb4_unicode_ci not null comment '图片url',
+    `sort`                int(11)                                 not null default '999' comment '排列次序',
+    `status`              tinyint(4)                              not null comment '状态',
+    `created_at`          timestamp                               null     default null,
+    `updated_at`          timestamp                               null     default null,
+    primary key (`id`),
+    unique key `product_brand_name_unique` (`name`)
+) engine = innodb
+  auto_increment = 4
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
+
+# 类目
+# 有时品牌不仅仅归属与一个类目，还是以iphonex举例，他是一部手机又是苹果产品但他又是一个音乐播放器。注意，这个时候不要将当前品牌绑定到三个类目上，如果你这样做了，未来的可维护性会很低。应该每个类目中绑定相同的品牌名称，你一定会问那这样数据垃圾不就产生了吗？我没有具体数据给你展现这样做的好处。
+# 但从业务说起，现在我需要统计每个类目下商品的购买数去做用户画像，你时你要如何区分当前这个商品到底是哪个类目下呢？无法区分，因为你将品牌绑定到了3个类目下，不知用户到底是通过哪个类目点击进去购买的。
+# 再者很多品牌公司不仅仅是做一个商品，类似索尼做mp3也做电视，手机，游戏机等。所以类目对应多个品牌，品牌应对应多个类目并非关联多个类目
+create table `product_category`
+(
+    `id`                 int(10) unsigned                        not null auto_increment,
+    `name`               varchar(255) collate utf8mb4_unicode_ci not null comment '分类表',
+    `pid`                int(11)                                 not null comment '父分类编号',
+    `cover`              varchar(255) collate utf8mb4_unicode_ci          default null comment '封面图',
+    `index_block_status` tinyint(4)                              not null default '0' comment '首页块级状态 1=>显示',
+    `status`             tinyint(4)                              not null default '1' comment '状态 1=>正常',
+    `sort`               int(11)                                 not null default '999' comment '排序',
+    `created_at`         timestamp                               null     default null,
+    `updated_at`         timestamp                               null     default null,
+    primary key (`id`)
+) engine = innodb
+  auto_increment = 26
+  default charset = utf8mb4
+  collate = utf8mb4_unicode_ci;
